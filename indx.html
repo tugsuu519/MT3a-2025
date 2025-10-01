@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Манай ангийн дурсамжийн музей</title>
+<style>
+/* ===== Body background ===== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url('images/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* ===== Wrapper ===== */
+.content-wrapper {
+  background: rgba(255,255,255,0.95);
+  border-radius: 20px;
+  padding: 30px;
+  width: 90%;
+  max-width: 1000px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== Header ===== */
+header {
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('angi zurag/5.jpg') no-repeat center center;
+  background-size: cover;
+  color: #fff;
+  padding: 2.5rem 1rem;
+  border-radius: 20px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  margin-bottom: 20px;
+}
+header h1 { margin: 0; font-size: 2.5rem; text-shadow: 2px 2px 6px #000; }
+header p { margin: 0.5rem 0; font-size: 1.2rem; }
+
+/* ===== Buttons ===== */
+button {
+  padding: 12px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  background: #4b6cb7;
+  color: white;
+  margin: 0.5rem;
+  transition: transform 0.3s, background 0.3s;
+}
+button:hover { background: #3a539b; transform: scale(1.1); }
+.hidden { display: none; }
+
+/* ===== Gallery ===== */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
+  gap: 15px;
+  margin-top: 25px;
+  padding: 15px;
+  border-radius: 15px;
+  width: 100%;
+}
+.item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 15px;
+  cursor: pointer;
+  background: #eee;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.item:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+.item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.item figcaption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  padding: 6px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ===== Videos ===== */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+  gap: 15px;
+  margin-top: 25px;
+  padding: 15px;
+  border-radius: 15px;
+  width: 100%;
+}
+video { width: 100%; border-radius: 15px; background: black; }
+
+/* ===== Teacher section ===== */
+.teacher-section {
+  margin-top: 25px;
+  padding: 25px;
+  background: linear-gradient(rgba(225,240,255,0.8), rgba(225,240,255,0.8)), url('images/teacher-bg.jpg') no-repeat center center;
+  background-size: cover;
+  border-radius: 15px;
+  text-align: left;
+  width: 100%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.teacher-section h2 { margin-top: 0; color: #1e3a8a; }
+
+/* ===== Lightbox ===== */
+.lightbox {
+  position: fixed;
+  top:0; left:0; width:100%; height:100%;
+  background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  opacity: 0; pointer-events: none; transition: opacity 0.5s;
+}
+.lightbox.show { opacity: 1; pointer-events: auto; }
+.lb-inner { position: relative; max-width: 90%; max-height: 90%; border-radius: 15px; }
+.lb-inner img { max-width: 100%; max-height: 100%; border-radius: 12px; transition: transform 0.5s; }
+.close-btn { position: absolute; top:-12px; right:-12px; background:#ff6b6b; color:white; border:none; border-radius:50%; padding:8px 12px; font-size:20px; cursor:pointer; transition: transform 0.3s; }
+.close-btn:hover { transform: scale(1.2); background:#ff4757; }
+.nav { position: absolute; top:50%; transform: translateY(-50%); background: rgba(255,255,255,0.6); border:none; font-size:28px; padding:12px 18px; border-radius:50%; cursor:pointer; transition: transform 0.3s; }
+.nav:hover { transform: translateY(-50%) scale(1.2); }
+.nav.left { left: 10px; }
+.nav.right { right: 10px; }
+
+/* ===== Responsive ===== */
+@media(max-width:600px){
+  .gallery-grid{ grid-template-columns: repeat(auto-fill,minmax(120px,1fr)); }
+  .video-grid{ grid-template-columns: repeat(auto-fill,minmax(150px,1fr)); }
+  header h1{ font-size: 1.8rem; }
+  header p{ font-size: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="content-wrapper">
+
+<header>
+<h1>🎓 Манай ангийн дурсамжийн музей MT-3a</h1>
+<p>→ Багшдаа зориулав ❤️</p>
+</header>
+
+<button id="showGalleryBtn">📸 Зургийн цомог</button>
+<button id="showVideosBtn">🎥 Бичлэгүүд</button>
+<button id="showTeacherBtn">👩‍🏫 Багшийн тухай</button>
+
+<section id="gallery" class="hidden">
+  <h2>📸 Зургийн цомог</h2>
+  <div class="gallery-grid">
+    <figure class="item" data-index="0"><img src="images/zurag.jpg" alt="Ангийн зураг"><figcaption>1000цэцэг 🔍</figcaption></figure>
+    <figure class="item" data-index="1"><img src="images/2.jpg" alt="Тэмцээний мөч"><figcaption>Сандгүйээ 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/3.jpg" alt="Аялал"><figcaption>Охид 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/4.jpg" alt="Аялал"><figcaption>Хөвгүүд 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/5.jpg" alt="Аялал"><figcaption>Ангийн зураг 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/6.jpg" alt="Аялал"><figcaption>Урлагын үзлэг 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/7.jpg" alt="Аялал"><figcaption>Нэг сур дээрл 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/8.jpg" alt="Аялал"><figcaption>Багш байна 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/9.jpg" alt="Аялал"><figcaption>Шинэ ангидаа 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/10.jpg" alt="Аялал"><figcaption>Багшгүй 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/11.jpg" alt="Аялал"><figcaption>Тансаглаж байна 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/12.jpg" alt="Аялал"><figcaption>Тансаглаж байна 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/13.jpg" alt="Аялал"><figcaption>Дадлага 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/14.jpg" alt="Аялал"><figcaption>Дадлага 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/15.jpg" alt="Аялал"><figcaption>Шинэ жил 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/16.jpg" alt="Аялал"><figcaption>Шинэ жил  🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/17.jpg" alt="Аялал"><figcaption>Монгол хувцас 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/18.jpg" alt="Аялал"><figcaption>Ихбаяр 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/19.jpg" alt="Аялал"><figcaption>Шинэ жил 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/20.jpg" alt="Аялал"><figcaption>Зоригоо 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/21.jpg" alt="Аялал"><figcaption>Монгол хувцас 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/22.jpg" alt="Аялал"><figcaption>Номын санд 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/23.jpg" alt="Аялал"><figcaption>Жижүүр анги 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/24.jpg" alt="Аялал"><figcaption>Жижүүр анги 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/25.jpg" alt="Аялал"><figcaption>Жижүүр анги 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/26.jpg" alt="Аялал"><figcaption>Зугаалгаар 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/27.jpg" alt="Аялал"><figcaption>Аялал 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/28.jpg" alt="Аялал"><figcaption>Ганаагийн ТӨМХ 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/29.jpg" alt="Аялал"><figcaption>Аялал 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/30.jpg" alt="Аялал"><figcaption>Аялал 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/31.jpg" alt="Аялал"><figcaption>Ганаагийн ТӨМХ 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/32.jpg" alt="Аялал"><figcaption>Аялал 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/33.jpg" alt="Аялал"><figcaption>Аялал 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/34.jpg" alt="Аялал"><figcaption>Аялал 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/35.jpg" alt="Аялал"><figcaption>Аялал 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/36.jpg" alt="Аялал"><figcaption>Аялал 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/38.jpg" alt="Аялал"><figcaption>Булчин 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/39.jpg" alt="Аялал"><figcaption>Булчин 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/40.jpg" alt="Аялал"><figcaption>Булчин 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/41.jpg" alt="Аялал"><figcaption>Зүрх 🔍</figcaption></figure>
+    <figure class="item" data-index="2"><img src="images/42.jpg" alt="Аялал"><figcaption>Хөөрхөн 🔍</figcaption></figure>
+  </div>
+</section>
+
+<section id="videos" class="hidden">
+  <h2>🎥 Бичлэгүүд</h2>
+  <div class="video-grid">
+    <video controls><source src="videos/bichleg.mp4" type="video/mp4"></video>
+    <video controls><source src="videos/2.mp4" type="video/mp4"></video>
+    <video controls><source src="videos/3.mp4" type="video/mp4"></video>
+    <video controls><source src="videos/4.mp4" type="video/mp4"></video>
+    <video controls><source src="videos/5.mp4" type="video/mp4"></video>
+    <video controls><source src="videos/6.mp4" type="video/mp4"></video>
+    <video controls><source src="videos/7.mp4" type="video/mp4"></video>
+    <video controls><source src="videos/8.mp4" type="video/mp4"></video>
+    <video controls><source src="videos/9.mp4" type="video/mp4"></video>
+    <video controls><source src="videos/10.mp4" type="video/mp4"></video>
+  </div>
+</section>
+
+<section id="teacher" class="teacher-section hidden">
+  <h2>👩‍🏫 Багшийн тухай</h2>
+  <p><strong>Манай багш:</strong> Ч. Оюунчимэг</p>
+  <p>Багшдаа баярлалаа! Та бидний амьдралд гэрэл болсон.</p>
+  <p>Бидний хамтдаа өнгөрүүлсэн мөчүүдийг мартахгүй ээ.</p>
+  <p>Багш Ч. Оюунчимэгтээ,
+
+    Та зөвхөн бидний мэдлэгийг заасан багш төдийгүй, бидний амьдралд гэрэл болон орж ирсэн нэгэн гайхалтай хүн юм. Таны анги доторх энерги, анхаарал, бүх хүүхдэд зориулсан чин сэтгэл нь бидний дурсамжийг үүсгэж, мартагдашгүй мөчүүдийг бий болгосон.
+    
+    IT-ийн хичээлээр та зөвхөн код бичих арга барилыг заасангүй, харин логик сэтгэлгээ, асуудлыг системтэй шийдвэрлэх чадвар, бүтээлч хандлага гэдгийг бидэнд ойлгуулсан. Та бидэнд зөвхөн технологийг заагаагүй, харин төгс бус зүйлсийг туршиж, алдаанаас суралцаж, шинэ санааг хэрэгжүүлэх итгэлийг заасан.
+    
+    Бидний хамтдаа өнгөрүүлсэн аялал, тэмцээн, урлагийн үзлэг, ангийн хөгжилтэй мөчүүд—бүгд таны зааж сургасан мэдлэг, урам зориг, анхааралд суурилж бүтсэн. Та бидний хувьд зөвхөн багш биш, IT-ийн ертөнцөд бидний гэрэл гэгээ болсон, дурсамжийн эхлэл болсон хүн юм.
+    
+    Бид таны зааж сургасан бүхнийг үргэлж санаж, амьдралынхаа замд хэрэгжүүлэх болно. Таныхаа заасан мэдлэг, ёс зүй, бүтээлч сэтгэлгээг үргэлж дурсаж, мартагдашгүй дурсамж болгон хадгалах болно.
+    
+    Бидний ирээдүйд таны хичээл, урам зориг, зөвлөгөө нь үргэлж бидний “runtime”-д update болж, алдагдалгүй ажиллах гэрэл болж байх болно.
+    
+    Багшдаа маш их баярлалаа! Таныг үргэлж санаж, бахархах болно ❤️</p>
+</section>
+
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <div class="lb-inner">
+    <button class="close-btn" id="closeBtn">×</button>
+    <button class="nav left" id="prevBtn">◀</button>
+    <img id="lbImage" src="" alt="">
+    <button class="nav right" id="nextBtn">▶</button>
+  </div>
+</div>
+
+<script>
+// ===== Toggle sections =====
+const galleryBtn = document.getElementById('showGalleryBtn');
+const videosBtn = document.getElementById('showVideosBtn');
+const teacherBtn = document.getElementById('showTeacherBtn');
+
+const gallery = document.getElementById('gallery');
+const videos = document.getElementById('videos');
+const teacher = document.getElementById('teacher');
+
+galleryBtn.addEventListener('click', () => {
+  gallery.classList.toggle('hidden');
+  galleryBtn.textContent = gallery.classList.contains('hidden') ? '📸 Зургийн цомог' : '❌ Галерей хаах';
+});
+
+videosBtn.addEventListener('click', () => {
+  videos.classList.toggle('hidden');
+  videosBtn.textContent = videos.classList.contains('hidden') ? '🎥 Бичлэгүүд' : '❌ Видео хаах';
+});
+
+teacherBtn.addEventListener('click', () => {
+  teacher.classList.toggle('hidden');
+  teacherBtn.textContent = teacher.classList.contains('hidden') ? '👩‍🏫 Багшийн тухай' : '❌ Багш хаах';
+});
+
+// ===== Lightbox =====
+const items = Array.from(document.querySelectorAll('.gallery-grid .item'));
+const lb = document.getElementById('lightbox');
+const lbImage = document.getElementById('lbImage');
+const closeBtn = document.getElementById('closeBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+let current = 0;
+
+function openLightbox(index){
+  const item = items[index];
+  lbImage.src = item.querySelector('img').src;
+  lbImage.alt = item.querySelector('img').alt;
+  lb.classList.add('show');
+  current = index;
+}
+
+function closeLightbox(){ lb.classList.remove('show'); }
+function showNext(){ openLightbox((current+1) % items.length); }
+function showPrev(){ openLightbox((current-1+items.length) % items.length); }
+
+items.forEach((item,index)=>item.addEventListener('click',()=>openLightbox(index)));
+closeBtn.addEventListener('click', closeLightbox);
+prevBtn.addEventListener('click', showPrev);
+nextBtn.addEventListener('click', showNext);
+document.addEventListener('keydown',(e)=>{
+  if(e.key==='Escape') closeLightbox();
+  if(e.key==='ArrowRight') showNext();
+  if(e.key==='ArrowLeft') showPrev();
+});
+</script>
+
+</body>
+</html>
